@@ -447,8 +447,6 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
         if (isDateDisabled(day, month, disabledDates, disabledDay, minDate, maxDate)) return;
 
         const part = focusedPart === 0 ? 'startDate' : 'endDate';
-        console.log({ focusedPart });
-
         onDateChange(day, part);
 
         // Start tracking drag - don't call onDateChange yet

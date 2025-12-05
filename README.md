@@ -287,6 +287,55 @@ const handleChange = (item: RangeKeyDict) => {
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## TODO / Future Improvements
+
+The following items are planned for future releases:
+
+### Testing
+
+- [ ] Unit tests for utility functions (`dateUtils`, `rangeUtils`)
+- [ ] Component tests for `DateRangePicker`, `Calendar`, `DateInput`, `DefinedRanges`
+- [ ] Integration tests for user interactions (click, drag, keyboard navigation)
+- [ ] Visual regression tests
+- [ ] Accessibility tests (a11y)
+- [ ] Test coverage reporting (aim for >80% coverage)
+
+### Documentation
+
+- [ ] Storybook for interactive component documentation
+- [ ] More code examples and use cases
+- [ ] Migration guide from other date picker libraries
+- [ ] CHANGELOG.md for version history
+- [ ] CONTRIBUTING.md guidelines
+- [ ] API documentation with JSDoc comments
+
+### Features
+
+- [ ] Multiple range selection support
+- [ ] Internationalization (i18n) with locale support
+- [ ] More predefined range templates
+- [ ] Custom date formatting with dayjs plugins
+- [ ] Server-side rendering (SSR) optimization
+- [ ] React Server Components compatibility
+- [ ] Keyboard shortcuts documentation
+- [ ] Touch/mobile gesture improvements
+
+### Developer Experience
+
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Automated releases with semantic versioning
+- [ ] Bundle size monitoring
+- [ ] Performance benchmarking
+- [ ] TypeScript strict mode improvements
+- [ ] ESLint warnings resolution
+
+### Performance
+
+- [ ] Code splitting for large date ranges
+- [ ] Virtual scrolling for long date lists
+- [ ] Memoization optimizations
+- [ ] Bundle size analysis and optimization
+
 ## License
 
 MIT

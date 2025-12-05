@@ -160,12 +160,10 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
             if (moveRangeOnFirstSelection && !retainEndDateOnFirstSelection) {
               newRange.endDate = undefined;
             }
-            console.log({ gvhvhgvh: newRange });
             // If new start is after end, set end date to new start date
             if (newRange.endDate) {
               const end = toDayjs(newRange.endDate);
               if (end && date.isAfter(end, 'day')) {
-                console.log('isAfter end');
                 newRange.endDate = date.toDate();
               }
             }
@@ -181,24 +179,18 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
               const start = toDayjs(preservedStartDate);
               // If end is before start, swap them
               if (start && date.isBefore(start, 'day')) {
-                console.log('isBefore start');
-
                 // Swap: new end becomes start, old start becomes end
                 newRange.startDate = date.toDate();
                 newRange.endDate = preservedStartDate;
               } else if (start && date.isAfter(start, 'day')) {
-                console.log('isAfter start');
                 // Normal case: end is after or equal to start - ONLY set endDate
                 // Explicitly preserve startDate - DO NOT touch it
                 newRange.startDate = preservedStartDate;
                 newRange.endDate = date.toDate();
-                console.log({ newRange });
               } else {
-                console.log('same day');
                 newRange.endDate = date.toDate();
               }
             } else {
-              console.log('no start date');
               // No start date yet, just set end date
               newRange.endDate = date.toDate();
             }
@@ -206,8 +198,6 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
 
           // Normalize range (only swaps if start > end, doesn't affect equal dates)
           const normalized = normalizeRange(newRange);
-
-          console.log({ normalized });
 
           // Create range key dict for onChange (for API compatibility)
           const rangeKey = normalized.key || 'selection';
