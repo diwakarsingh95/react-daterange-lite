@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
   // Preview/Dev mode - serve the demo app
   if (command === 'serve') {
     return {
@@ -11,6 +11,26 @@ export default defineConfig(({ command }) => {
       server: {
         port: 3000,
         open: true,
+      },
+    };
+  }
+
+  // Build mode for demo app (GitHub Pages)
+  if (mode === 'demo') {
+    return {
+      plugins: [react()],
+      root: '.',
+      base: '/react-daterange-lite/',
+      build: {
+        outDir: 'dist-demo',
+        target: 'es2022',
+        sourcemap: false,
+        minify: 'esbuild',
+        rollupOptions: {
+          input: {
+            main: './index.html',
+          },
+        },
       },
     };
   }

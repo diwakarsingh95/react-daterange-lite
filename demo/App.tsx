@@ -139,7 +139,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '1rem' }}>React Date Range Picker</h1>
+      <h1 style={{ marginBottom: '1rem' }}>react-daterange-lite</h1>
       <p style={{ marginBottom: '2rem', color: '#666', fontSize: '0.875rem', lineHeight: '1.6' }}>
         A lightweight, performant React date range picker library using dayjs. Built with modern
         React standards, tree-shakable, and fully customizable. Each example below includes detailed

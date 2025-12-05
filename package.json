@@ -27,6 +27,7 @@
     "preview": "vite",
     "build": "tsc && vite build",
     "build:preview": "vite build --mode preview",
+    "build:demo": "vite build --mode demo",
     "prepublishOnly": "npm run build",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -47,12 +48,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/diwakarsingh95/react-date-range-picker.git"
+    "url": "https://github.com/diwakarsingh95/react-daterange-lite.git"
   },
   "bugs": {
-    "url": "https://github.com/diwakarsingh95/react-date-range-picker/issues"
+    "url": "https://github.com/diwakarsingh95/react-daterange-lite/issues"
   },
-  "homepage": "https://github.com/diwakarsingh95/react-date-range-picker#readme",
+  "homepage": "https://github.com/diwakarsingh95/react-daterange-lite#readme",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",

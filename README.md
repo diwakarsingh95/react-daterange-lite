@@ -1,4 +1,4 @@
-# React Date Range Picker
+# React Date Range Lite
 
 A lightweight, performant React date range picker library built with `dayjs`. Optimized for modern React applications with minimal bundle size, tree-shaking support, and full TypeScript coverage.
 
