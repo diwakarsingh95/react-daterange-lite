@@ -399,21 +399,22 @@
   color: #1d2429;
 }
 
-/* Overlap left border for dates that have a previous date in hover range */
+/* Eliminate gaps between hover range dates using negative margins */
+/* Dates with previous date in hover range - overlap left border */
 .rdr-DayHoverRangeHasPrev:not(.rdr-DayStartOfWeek) {
   margin-left: -1px !important;
   border-left: none !important;
   border-left-width: 0 !important;
 }
 
-/* Overlap right border for dates that have a next date in hover range */
+/* Dates with next date in hover range - overlap right border */
 .rdr-DayHoverRangeHasNext:not(.rdr-DayEndOfWeek) {
   margin-right: -1px !important;
   border-right: none !important;
   border-right-width: 0 !important;
 }
 
-/* Overlap both sides for dates in the middle of hover range */
+/* Dates in middle of hover range - remove both side borders for continuous border */
 .rdr-DayHoverRangeHasPrev.rdr-DayHoverRangeHasNext:not(.rdr-DayStartOfWeek):not(.rdr-DayEndOfWeek) {
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -421,7 +422,7 @@
   border-right-width: 0 !important;
 }
 
-/* Rounded corners for hover range start/end - reset margins and show full border */
+/* Hover range start - show left border with rounded corners */
 .rdr-DayHoverRangeStart {
   border-top-left-radius: 4px !important;
   border-bottom-left-radius: 4px !important;
@@ -429,6 +430,7 @@
   border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
 }
 
+/* Hover range end - show right border with rounded corners */
 .rdr-DayHoverRangeEnd {
   border-top-right-radius: 4px !important;
   border-bottom-right-radius: 4px !important;
@@ -436,12 +438,18 @@
   border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
 }
 
-/* Ensure hover border doesn't override selected background */
-.rdr-DaySelected.rdr-DayInHoverRange,
-.rdr-DayInRange:not(.rdr-DayStartOfRange):not(.rdr-DayEndOfRange).rdr-DayInHoverRange,
-.rdr-DayStartOfRange:not(.rdr-DayEndOfRange).rdr-DayInHoverRange,
-.rdr-DayEndOfRange:not(.rdr-DayStartOfRange).rdr-DayInHoverRange {
-  box-shadow: none !important;
+/* Ensure hover border doesn't override selected/range background */
+/* Remove inline borders on selected dates to prevent overlap with inner background */
+.rdr-DaySelected.rdr-DayInHoverRange:not(.rdr-DayHoverRangeStart):not(.rdr-DayHoverRangeEnd),
+.rdr-DayInRange.rdr-DayInHoverRange:not(.rdr-DayStartOfRange):not(.rdr-DayEndOfRange):not(
+    .rdr-DayHoverRangeStart
+  ):not(.rdr-DayHoverRangeEnd),
+.rdr-DayStartOfRange.rdr-DayInHoverRange:not(.rdr-DayEndOfRange):not(.rdr-DayHoverRangeStart):not(
+    .rdr-DayHoverRangeEnd
+  ),
+.rdr-DayEndOfRange.rdr-DayInHoverRange:not(.rdr-DayStartOfRange):not(.rdr-DayHoverRangeStart):not(
+    .rdr-DayHoverRangeEnd
+  ) {
   border-inline: none !important;
   background-color: inherit !important;
 }
@@ -474,110 +482,81 @@
   border-top-right-radius: 1em;
 }
 
-.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev {
+/* Hover border on selected dates - prevent overlap with inner background */
+/* Adjust inner width only when borders are present (at range start/end or week boundaries) */
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart .rdr-DayInner,
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd .rdr-DayInner,
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayStartOfWeek .rdr-DayInner,
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayEndOfWeek .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+}
+
+/* Left side adjustments: when hover border appears on left (start of range or start of week) */
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart .rdr-DayInner,
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayStartOfWeek .rdr-DayInner {
+  margin-left: 4px !important;
+}
+
+/* Right side adjustments: when hover border appears on right (end of range or end of week) */
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd:not(.rdr-DayEndOfWeek) .rdr-DayInner,
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayEndOfWeek:not(.rdr-DayHoverRangeEnd) .rdr-DayInner {
+  margin-right: 4px !important;
+}
+
+/* Special case: end of week with hover range end border - use padding to prevent overlap with border */
+/* Increased padding to 5px to ensure rounded corners (if present) don't overlap with border */
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayEndOfWeek .rdr-DayInner {
+  margin-right: 4px !important;
+  width: calc(100% - 4px) !important;
+}
+
+/* Special case: end of range + end of week + hover range end - ensure rounded inner background doesn't overlap border */
+/* Need extra padding for rounded corners (1em radius) to clear the 1px border */
+.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayEndOfWeek
+  .rdr-DayInner {
+  margin-right: 4px !important;
+  width: calc(100% - 4px) !important;
+  box-sizing: border-box !important;
+}
+
+/* Hover border on selected range start dates - show left border with rounded corners */
+.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart {
+  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+
+/* Hover border on selected range end dates - show right border with rounded corners */
+.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd {
   border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
   border-top-right-radius: 1em !important;
   border-bottom-right-radius: 1em !important;
 }
 
-.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev {
-  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
-  border-top-right-radius: 1em !important;
-  border-bottom-right-radius: 1em !important;
+/* When hover range end has previous date, remove left border and use negative margin to eliminate gap */
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev:not(
+    .rdr-DayStartOfWeek
+  ) {
   border-left: none !important;
   border-left-width: 0 !important;
   margin-left: -1px !important;
 }
 
-.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
-  .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  margin-right: 4px !important;
+/* When hover range start has next date, remove right border and use negative margin to eliminate gap */
+.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext:not(
+    .rdr-DayEndOfWeek
+  ) {
+  border-right: none !important;
+  border-right-width: 0 !important;
+  margin-right: -1px !important;
 }
 
-.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
-  .rdr-DayInner
-  .rdr-DayNumber {
+/* Text styling for selected dates in hover range */
+.rdr-DaySelected.rdr-DayInHoverRange .rdr-DayNumber {
   color: #ffffff !important;
-  font-weight: 600 !important;
 }
 
-.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev.rdr-DayEndOfWeek
-  .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  padding-right: 4px !important;
-}
-
-.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev.rdr-DayEndOfWeek
-  .rdr-DayInner
-  .rdr-DayNumber {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-}
-
-.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext {
-  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
-  border-top-left-radius: 1em !important;
-  border-bottom-left-radius: 1em !important;
-}
-
-.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext
-  .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  margin-left: 4px !important;
-}
-
-.rdr-Day.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayStartOfWeek .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  margin-left: 4px !important;
-}
-
-.rdr-Day.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayEndOfWeek .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  margin-right: 4px !important;
-}
-
-.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeHasPrev.rdr-DayEndOfWeek
-  .rdr-DayInner
-  .rdr-DayNumber {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-}
-
-.rdr-Day.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext {
-  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
-  border-top-left-radius: 1em !important;
-  border-bottom-left-radius: 1em !important;
-}
-
-.rdr-Day.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext
-  .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  margin-left: 4px !important;
-}
-
-.rdr-Day.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext
-  .rdr-DayInner
-  .rdr-DayNumber {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-}
-
-.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev {
-  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
-  border-top-right-radius: 1em !important;
-  border-bottom-right-radius: 1em !important;
-}
-
-.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
-  .rdr-DayInner {
-  width: calc(100% - 4px) !important;
-  margin-right: 4px !important;
-}
-
-.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
-  .rdr-DayInner
-  .rdr-DayNumber {
-  color: #ffffff !important;
+/* Today indicator styling on selected dates in hover range */
+.rdr-DayToday.rdr-DaySelected.rdr-DayInHoverRange .rdr-DayNumber {
   font-weight: 600 !important;
 }
