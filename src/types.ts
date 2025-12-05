@@ -179,8 +179,6 @@ export interface DateRangePickerProps {
   color?: string;
   /** Primary theme color for selected ranges, hover borders, focus styles, etc. */
   themeColor?: string;
-  /** Array of range colors */
-  rangeColors?: string[];
   /** Predefined ranges */
   staticRanges?: StaticRange[];
   /** Input-based ranges */
@@ -256,8 +254,6 @@ export interface CalendarProps {
   moveRangeOnFirstSelection?: boolean;
   /** Retain end date on first selection */
   retainEndDateOnFirstSelection?: boolean;
-  /** Range colors */
-  rangeColors?: string[];
   /** Primary theme color for selected ranges, hover borders, focus styles, etc. */
   themeColor?: string;
   /** Locale */

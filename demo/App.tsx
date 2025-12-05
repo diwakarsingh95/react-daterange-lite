@@ -22,7 +22,8 @@ function App() {
         startDate: selection.startDate ? dayjs(selection.startDate).toDate() : new Date(),
         endDate: selection.endDate ? dayjs(selection.endDate).toDate() : new Date(),
         key: selection.key || 'selection',
-        color: selectedRangeColor, // Apply the selected range color
+        // Preserve the range's color if it exists, otherwise preserve current color or use themeColor
+        color: selection.color || state.selection.color || themeColor,
       },
     });
   };
@@ -632,11 +633,6 @@ function App() {
               legacy prop, use <code>themeColor</code> instead)
             </li>
             <li>
-              <code>rangeColors</code> - Array of colors to cycle through for multiple ranges (type:{' '}
-              <code>string[]</code>, default:{' '}
-              <code>['#3d91ff', '#0ecb81', '#feb019', '#ff4560', '#775dd0']</code>)
-            </li>
-            <li>
               <code>themeColor</code> - Primary theme color for selected ranges, hover borders,
               focus styles, etc. (type: <code>string</code>, default: <code>'#3d91ff'</code>)
             </li>
@@ -656,8 +652,7 @@ function App() {
           <p style={{ margin: '0.5rem 0 0 0', fontStyle: 'italic', color: '#666' }}>
             <strong>Note:</strong> The <code>color</code> prop is legacy. Use{' '}
             <code>themeColor</code> for theme colors and set <code>color</code> on individual range
-            objects for per-range colors. The <code>rangeColors</code> array is used when a range
-            doesn't have its own <code>color</code> property.
+            objects for per-range colors.
           </p>
           <details style={{ marginTop: '0.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Code Example</summary>
@@ -676,7 +671,6 @@ function App() {
   ranges={[state.selection]}
   themeColor={themeColor}
   color="#ff6b6b" // Legacy prop
-  rangeColors={['#ff6b6b', '#4ecdc4', '#45b7d1']}
   showDateDisplay={true}
 />`}
             </pre>
@@ -687,7 +681,6 @@ function App() {
           ranges={[state.selection]}
           themeColor={themeColor}
           color="#ff6b6b"
-          rangeColors={['#ff6b6b', '#4ecdc4', '#45b7d1']}
           showDateDisplay={true}
         />
       </div>

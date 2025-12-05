@@ -1,7 +1,7 @@
 {
   "name": "react-daterange-lite",
   "version": "0.1.0",
-  "description": "A lightweight, performant React date range picker using dayjs - compatible with react-date-range API",
+  "description": "A lightweight, performant React date range picker using dayjs - optimized for modern React applications",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

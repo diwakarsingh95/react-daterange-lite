@@ -11,7 +11,6 @@ export interface DefinedRangesProps {
   onRangeChange: (range: RangeKeyDict) => void;
   onRangeFocusChange: (focusedRange: [number, number]) => void;
   onPreviewChange?: (preview: Range | null) => void;
-  rangeColors?: string[];
   className?: string;
   style?: React.CSSProperties;
   classNames?: {

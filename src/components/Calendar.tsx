@@ -5,7 +5,6 @@ import {
   DEFAULT_COLOR,
   DEFAULT_DAY_FORMAT,
   DEFAULT_MONTH_FORMAT,
-  DEFAULT_RANGE_COLORS,
   DEFAULT_WEEK_DAYS,
 } from '../utils/constants';
 import {
@@ -41,7 +40,6 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
     dragSelectionEnabled = true,
     moveRangeOnFirstSelection = false,
     retainEndDateOnFirstSelection = false,
-    rangeColors = DEFAULT_RANGE_COLORS,
     themeColor = DEFAULT_COLOR,
     locale,
     classNames,
@@ -199,10 +197,10 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
     );
 
     const getRangeColor = useCallback(
-      (range: Range, index: number): string => {
-        return range.color || rangeColors[index % rangeColors.length] || DEFAULT_COLOR;
+      (range: Range): string => {
+        return range.color || themeColor || DEFAULT_COLOR;
       },
-      [rangeColors]
+      [themeColor]
     );
 
     const getDayClasses = useCallback(
@@ -338,7 +336,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
         // Apply background color only to selected range (not preview)
         // Only apply if date is in current month (not prev/next month dates)
         if (activeRange && isSameMonth(day, month)) {
-          const color = getRangeColor(activeRange, 0);
+          const color = getRangeColor(activeRange);
           const isStart = isStartDate(day, activeRange);
           const isEnd = isEndDate(day, activeRange);
           const inRange = isDateInRange(day, activeRange);

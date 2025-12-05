@@ -1,16 +1,15 @@
 # React Date Range Picker
 
-A lightweight, performant React date range picker library built with `dayjs`. API-compatible with `react-date-range` but optimized for modern React applications with minimal bundle size, tree-shaking support, and full TypeScript coverage.
+A lightweight, performant React date range picker library built with `dayjs`. Optimized for modern React applications with minimal bundle size, tree-shaking support, and full TypeScript coverage.
 
 ## Features
 
-- 🚀 **Lightweight**: Uses `dayjs` (~2KB) instead of `date-fns` for smaller bundle size
+- 🚀 **Lightweight**: Uses `dayjs` (~2KB) for smaller bundle size
 - 📦 **Tree-shakable**: Named exports allow bundlers to eliminate unused code
 - ⚡ **Performant**: Optimized with React.memo, useMemo, and useCallback
-- 🎨 **Modern UI**: Clean, accessible interface similar to react-date-range
+- 🎨 **Modern UI**: Clean, accessible interface with smooth interactions
 - 🔧 **TypeScript**: Full TypeScript support with comprehensive type definitions
 - ♿ **Accessible**: WCAG 2.1 AA compliant with keyboard navigation
-- 🎯 **API Compatible**: Accepts same props as react-date-range for easy migration
 - 🎨 **Customizable**: Theme colors, custom styles, and flexible date formatting
 
 ## Quick Start
@@ -76,8 +75,7 @@ const staticRanges = [
     isSelected: (range) => {
       if (!range.startDate || !range.endDate) return false;
       return (
-        dayjs(range.startDate).isSame(dayjs(), 'day') &&
-        dayjs(range.endDate).isSame(dayjs(), 'day')
+        dayjs(range.startDate).isSame(dayjs(), 'day') && dayjs(range.endDate).isSame(dayjs(), 'day')
       );
     },
   },
@@ -92,10 +90,7 @@ const staticRanges = [
       if (!range.startDate || !range.endDate) return false;
       const start = dayjs().subtract(6, 'day');
       const end = dayjs();
-      return (
-        dayjs(range.startDate).isSame(start, 'day') &&
-        dayjs(range.endDate).isSame(end, 'day')
-      );
+      return dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day');
     },
   },
 ];
@@ -104,7 +99,7 @@ const staticRanges = [
   onChange={(item) => setState({ selection: item.selection })}
   ranges={[state.selection]}
   staticRanges={staticRanges}
-/>
+/>;
 ```
 
 ## Examples
@@ -128,14 +123,11 @@ import dayjs from 'dayjs';
 <DateRangePicker
   ranges={[state.selection]}
   onChange={(item) => setState({ selection: item.selection })}
-  disabledDates={[
-    dayjs().add(1, 'day').toDate(),
-    dayjs().add(2, 'day').toDate(),
-  ]}
+  disabledDates={[dayjs().add(1, 'day').toDate(), dayjs().add(2, 'day').toDate()]}
   minDate={dayjs().subtract(1, 'month').toDate()}
   maxDate={dayjs().add(3, 'month').toDate()}
   disabledDay={(date) => date.day() === 0 || date.day() === 6} // Disable weekends
-/>
+/>;
 ```
 
 ### Single Month Display
@@ -155,7 +147,6 @@ import dayjs from 'dayjs';
   ranges={[state.selection]}
   onChange={(item) => setState({ selection: item.selection })}
   themeColor="#ff6b6b"
-  rangeColors={['#ff6b6b', '#4ecdc4', '#45b7d1']}
   classNames={{
     dateRangePickerWrapper: 'custom-wrapper',
     calendarWrapper: 'custom-calendar',
@@ -172,49 +163,48 @@ import dayjs from 'dayjs';
 
 ### DateRangePicker Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ranges` | `Range[]` | - | Array of range objects to display |
-| `onChange` | `(item: RangeKeyDict) => void` | - | Callback fired when the user changes the date |
-| `onRangeFocusChange` | `(focusedRange: [number, number]) => void` | - | Callback fired when the user changes the focused range |
-| `startDate` | `DateInput` | - | Initial start date |
-| `endDate` | `DateInput` | - | Initial end date |
-| `focusedRange` | `[number, number]` | `[0, 0]` | Initial focused range |
-| `initialFocusedRange` | `[number, number]` | `[0, 0]` | Initial focused range |
-| `months` | `number` | `2` | Number of months to display |
-| `direction` | `'horizontal' \| 'vertical'` | `'horizontal'` | Direction of calendar months |
-| `showMonthArrow` | `boolean` | `true` | Show month navigation arrows |
-| `showDateDisplay` | `boolean` | `true` | Show date display |
-| `showPreview` | `boolean` | `true` | Show preview range |
-| `editableDateInputs` | `boolean` | `false` | Allow manual date input |
-| `dragSelectionEnabled` | `boolean` | `true` | Enable drag selection |
-| `moveRangeOnFirstSelection` | `boolean` | `false` | Move range on first selection |
-| `retainEndDateOnFirstSelection` | `boolean` | `false` | Retain end date on first selection |
-| `calendarFocus` | `'forwards' \| 'backwards'` | `'forwards'` | Which calendar to focus |
-| `disabledDates` | `DateInput[]` | - | Array of disabled dates |
-| `disabledDay` | `(date: Dayjs) => boolean` | - | Function to disable days |
-| `minDate` | `DateInput` | - | Minimum selectable date |
-| `maxDate` | `DateInput` | - | Maximum selectable date |
-| `dateDisplayFormat` | `string` | `'MMM D, YYYY'` | Date display format |
-| `monthDisplayFormat` | `string` | `'MMMM YYYY'` | Month display format |
-| `weekdayDisplayFormat` | `string` | `'dd'` | Weekday format |
-| `dayDisplayFormat` | `string` | `'D'` | Day format |
-| `weekStartsOn` | `number` | `0` | Week start day (0-6, 0 = Sunday) |
-| `locale` | `LocaleConfig` | - | Locale configuration |
-| `className` | `string` | - | Custom CSS class |
-| `classNames` | `ClassNames` | - | Custom class names object |
-| `styles` | `Styles` | - | Custom styles object |
-| `themeColor` | `string` | `'#3d91ff'` | Primary theme color for selected ranges, hover borders, focus styles |
-| `color` | `string` | `'#3d91ff'` | Legacy prop, use `themeColor` instead |
-| `rangeColors` | `string[]` | `['#3d91ff', ...]` | Array of range colors |
-| `staticRanges` | `StaticRange[]` | - | Predefined ranges |
-| `inputRanges` | `InputRange[]` | - | Input-based ranges |
-| `onShownDateChange` | `(shownDate: Dayjs) => void` | - | Callback for shown date change |
-| `onPreviewChange` | `(preview: Range \| null) => void` | - | Callback for preview change |
-| `renderStaticRangeLabel` | `(staticRange: StaticRange) => ReactNode` | - | Custom render function |
-| `renderInputRangeLabel` | `(inputRange: InputRange) => ReactNode` | - | Custom render function |
-| `ariaLabels` | `AriaLabels` | - | ARIA labels object |
-| `wrapperClassName` | `string` | - | Wrapper class name |
+| Prop                            | Type                                       | Default         | Description                                                          |
+| ------------------------------- | ------------------------------------------ | --------------- | -------------------------------------------------------------------- |
+| `ranges`                        | `Range[]`                                  | -               | Array of range objects to display                                    |
+| `onChange`                      | `(item: RangeKeyDict) => void`             | -               | Callback fired when the user changes the date                        |
+| `onRangeFocusChange`            | `(focusedRange: [number, number]) => void` | -               | Callback fired when the user changes the focused range               |
+| `startDate`                     | `DateInput`                                | -               | Initial start date                                                   |
+| `endDate`                       | `DateInput`                                | -               | Initial end date                                                     |
+| `focusedRange`                  | `[number, number]`                         | `[0, 0]`        | Initial focused range                                                |
+| `initialFocusedRange`           | `[number, number]`                         | `[0, 0]`        | Initial focused range                                                |
+| `months`                        | `number`                                   | `2`             | Number of months to display                                          |
+| `direction`                     | `'horizontal' \| 'vertical'`               | `'horizontal'`  | Direction of calendar months                                         |
+| `showMonthArrow`                | `boolean`                                  | `true`          | Show month navigation arrows                                         |
+| `showDateDisplay`               | `boolean`                                  | `true`          | Show date display                                                    |
+| `showPreview`                   | `boolean`                                  | `true`          | Show preview range                                                   |
+| `editableDateInputs`            | `boolean`                                  | `false`         | Allow manual date input                                              |
+| `dragSelectionEnabled`          | `boolean`                                  | `true`          | Enable drag selection                                                |
+| `moveRangeOnFirstSelection`     | `boolean`                                  | `false`         | Move range on first selection                                        |
+| `retainEndDateOnFirstSelection` | `boolean`                                  | `false`         | Retain end date on first selection                                   |
+| `calendarFocus`                 | `'forwards' \| 'backwards'`                | `'forwards'`    | Which calendar to focus                                              |
+| `disabledDates`                 | `DateInput[]`                              | -               | Array of disabled dates                                              |
+| `disabledDay`                   | `(date: Dayjs) => boolean`                 | -               | Function to disable days                                             |
+| `minDate`                       | `DateInput`                                | -               | Minimum selectable date                                              |
+| `maxDate`                       | `DateInput`                                | -               | Maximum selectable date                                              |
+| `dateDisplayFormat`             | `string`                                   | `'MMM D, YYYY'` | Date display format                                                  |
+| `monthDisplayFormat`            | `string`                                   | `'MMMM YYYY'`   | Month display format                                                 |
+| `weekdayDisplayFormat`          | `string`                                   | `'dd'`          | Weekday format                                                       |
+| `dayDisplayFormat`              | `string`                                   | `'D'`           | Day format                                                           |
+| `weekStartsOn`                  | `number`                                   | `0`             | Week start day (0-6, 0 = Sunday)                                     |
+| `locale`                        | `LocaleConfig`                             | -               | Locale configuration                                                 |
+| `className`                     | `string`                                   | -               | Custom CSS class                                                     |
+| `classNames`                    | `ClassNames`                               | -               | Custom class names object                                            |
+| `styles`                        | `Styles`                                   | -               | Custom styles object                                                 |
+| `themeColor`                    | `string`                                   | `'#3d91ff'`     | Primary theme color for selected ranges, hover borders, focus styles |
+| `color`                         | `string`                                   | `'#3d91ff'`     | Legacy prop, use `themeColor` instead                                |
+| `staticRanges`                  | `StaticRange[]`                            | -               | Predefined ranges                                                    |
+| `inputRanges`                   | `InputRange[]`                             | -               | Input-based ranges                                                   |
+| `onShownDateChange`             | `(shownDate: Dayjs) => void`               | -               | Callback for shown date change                                       |
+| `onPreviewChange`               | `(preview: Range \| null) => void`         | -               | Callback for preview change                                          |
+| `renderStaticRangeLabel`        | `(staticRange: StaticRange) => ReactNode`  | -               | Custom render function                                               |
+| `renderInputRangeLabel`         | `(inputRange: InputRange) => ReactNode`    | -               | Custom render function                                               |
+| `ariaLabels`                    | `AriaLabels`                               | -               | ARIA labels object                                                   |
+| `wrapperClassName`              | `string`                                   | -               | Wrapper class name                                                   |
 
 ### Range Interface
 
@@ -246,29 +236,6 @@ interface StaticRange {
 }
 ```
 
-## Migration from react-date-range
-
-This library is designed to be a drop-in replacement for `react-date-range`. The main differences:
-
-1. **Import path**: Change from `react-date-range` to `react-daterange-lite`
-2. **Styles**: Import from `react-daterange-lite/styles` instead of `react-date-range/dist/styles.css`
-3. **Date library**: Uses `dayjs` internally instead of `date-fns` (no API changes needed)
-
-### Before (react-date-range)
-
-```tsx
-import { DateRangePicker } from 'react-date-range';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
-```
-
-### After (react-daterange-lite)
-
-```tsx
-import { DateRangePicker } from 'react-daterange-lite';
-import 'react-daterange-lite/styles';
-```
-
 ## Development
 
 To preview the component locally:
@@ -287,9 +254,9 @@ This will start a development server with multiple examples showcasing different
 
 ## Performance
 
-- **Bundle Size**: ~15KB gzipped (including dayjs)
+- **Bundle Size**: ~8-10KB gzipped (ESM: ~10KB, CJS: ~9KB) + ~2.4KB CSS
 - **Tree-shaking**: All utilities and components are tree-shakable
-- **Optimizations**: 
+- **Optimizations**:
   - React.memo for all components
   - useMemo for expensive calculations
   - useCallback for event handlers
@@ -326,4 +293,4 @@ MIT
 
 ## Acknowledgments
 
-This library is inspired by [react-date-range](https://github.com/hypeserver/react-date-range) and aims to provide a modern, lightweight alternative using `dayjs`.
+This library provides a modern, lightweight date range picker solution using `dayjs` for optimal performance and bundle size.
