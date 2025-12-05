@@ -8,7 +8,7 @@ import {
   defaultStaticRanges,
 } from '../utils/constants';
 import { addMonths, subtractMonths, toDate, toDayjs } from '../utils/dateUtils';
-import { normalizeRange } from '../utils/rangeUtils';
+import { getPreviewRange, normalizeRange } from '../utils/rangeUtils';
 import { Calendar } from './Calendar';
 import { DateInput } from './DateInput';
 import './DateRangePicker.css';
@@ -59,16 +59,6 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
     ariaLabels,
     wrapperClassName = '',
   }: DateRangePickerProps) => {
-    // Handle preview change from calendars
-    const handlePreviewChange = useCallback(
-      (preview: Range | null) => {
-        setSharedPreviewRange(preview);
-        if (onPreviewChange) {
-          onPreviewChange(preview);
-        }
-      },
-      [onPreviewChange]
-    );
     // Initialize range
     const getInitialRange = useCallback((): Range => {
       if (initialRanges && initialRanges.length > 0) {
@@ -99,6 +89,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
       const start = toDayjs(range?.startDate);
       return start || dayjs();
     });
+    const [sharedHoverDate, setSharedHoverDate] = useState<Dayjs | null>(null);
     const [sharedPreviewRange, setSharedPreviewRange] = useState<Range | null>(null);
     const [sharedDragState, setSharedDragState] = useState<{
       isDragging: boolean;
@@ -135,6 +126,37 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
         setFocusedPart(initialFocusedRange[1]);
       }
     }, [initialFocusedRange]);
+
+    // Handle hover date changes (shared across calendars)
+    const handleHoverDateChange = useCallback(
+      (hover: Dayjs | null) => {
+        setSharedHoverDate(hover);
+        if (hover) {
+          const preview = getPreviewRange(hover, range);
+          setSharedPreviewRange(preview);
+          if (onPreviewChange) {
+            onPreviewChange(preview);
+          }
+        } else {
+          setSharedPreviewRange(null);
+          if (onPreviewChange) {
+            onPreviewChange(null);
+          }
+        }
+      },
+      [range, onPreviewChange]
+    );
+
+    // Handle preview change from calendars
+    const handlePreviewChange = useCallback(
+      (preview: Range | null) => {
+        setSharedPreviewRange(preview);
+        if (onPreviewChange) {
+          onPreviewChange(preview);
+        }
+      },
+      [onPreviewChange]
+    );
 
     // Handle date change
     const handleDateChange = useCallback(
@@ -563,6 +585,8 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
                   key={index}
                   month={month}
                   range={range}
+                  hoverDate={sharedHoverDate}
+                  onHoverDateChange={handleHoverDateChange}
                   focusedPart={focusedPart}
                   onDateChange={handleDateChange}
                   onPreviewChange={handlePreviewChange}

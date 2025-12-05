@@ -212,6 +212,10 @@ export interface CalendarProps {
   month: Dayjs;
   /** Current range */
   range: Range;
+  /** Shared hover date across calendars */
+  hoverDate?: Dayjs | null;
+  /** Callback to update shared hover date */
+  onHoverDateChange?: (date: Dayjs | null) => void;
   /** Focused part (0 = startDate, 1 = endDate) */
   focusedPart: number;
   /** On date change callback */
@@ -227,7 +231,11 @@ export interface CalendarProps {
     hasDragged: boolean;
   };
   /** Callback to update shared drag state */
-  onDragStateChange?: (state: { isDragging: boolean; dragStartDate: Dayjs | null; hasDragged: boolean }) => void;
+  onDragStateChange?: (state: {
+    isDragging: boolean;
+    dragStartDate: Dayjs | null;
+    hasDragged: boolean;
+  }) => void;
   /** Minimum date */
   minDate?: DateInput;
   /** Maximum date */
@@ -279,5 +287,3 @@ export interface CalendarProps {
   /** On month change */
   onMonthChange?: (month: Dayjs) => void;
 }
-
-

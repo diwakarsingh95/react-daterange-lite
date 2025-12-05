@@ -23,9 +23,12 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
   ({
     month,
     range,
+    hoverDate,
+    onHoverDateChange,
     focusedPart,
     onDateChange,
     onPreviewChange,
+    sharedPreviewRange,
     sharedDragState,
     onDragStateChange,
     minDate,
@@ -38,8 +41,8 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
     dayDisplayFormat = DEFAULT_DAY_FORMAT,
     showPreview = true,
     dragSelectionEnabled = true,
-    moveRangeOnFirstSelection = false,
-    retainEndDateOnFirstSelection = false,
+    moveRangeOnFirstSelection: _moveRangeOnFirstSelection = false,
+    retainEndDateOnFirstSelection: _retainEndDateOnFirstSelection = false,
     themeColor = DEFAULT_COLOR,
     locale,
     classNames,
@@ -49,7 +52,6 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
     showHeader = true,
     onMonthChange,
   }: CalendarProps) => {
-    const [hoverDate, setHoverDate] = useState<Dayjs | null>(null);
     // Use shared drag state if available, otherwise use local state
     const [localDragState, setLocalDragState] = useState<{
       isDragging: boolean;
@@ -112,24 +114,29 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
       return rotated;
     }, [weekStartsOn, locale]);
 
+    // Use shared preview range if available (from other calendar), otherwise compute from shared hover date
     const previewRange = useMemo(() => {
+      // Prioritize shared preview range for cross-calendar hover preview
+      if (sharedPreviewRange) {
+        return sharedPreviewRange;
+      }
+
+      // Fall back to shared hover date
       if (!showPreview || !hoverDate) return null;
 
       return getPreviewRange(hoverDate, range);
-    }, [
-      hoverDate,
-      range,
-      focusedPart,
-      showPreview,
-      moveRangeOnFirstSelection,
-      retainEndDateOnFirstSelection,
-    ]);
+    }, [sharedPreviewRange, hoverDate, range, showPreview]);
 
     React.useEffect(() => {
-      if (onPreviewChange) {
+      // Only notify parent of preview change if we're using shared hover (no shared preview supplied)
+      // This prevents circular updates when shared preview is already set
+      if (onPreviewChange && !sharedPreviewRange && previewRange) {
         onPreviewChange(previewRange);
+      } else if (onPreviewChange && !sharedPreviewRange && !previewRange && hoverDate === null) {
+        // Clear preview when hover leaves and no shared preview exists
+        onPreviewChange(null);
       }
-    }, [previewRange, onPreviewChange]);
+    }, [previewRange, onPreviewChange, sharedPreviewRange, hoverDate]);
 
     const handlePrevMonth = useCallback(() => {
       const newMonth = subtractMonths(month, 1);
@@ -224,7 +231,13 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
 
         // Check if actually disabled (min/max/disabledDates/disabledDay) - NOT checking month
         // Adjacent month dates are not disabled, they're just passive
-        const isActuallyDisabled = isDateDisabled(day, disabledDates, disabledDay, minDate, maxDate);
+        const isActuallyDisabled = isDateDisabled(
+          day,
+          disabledDates,
+          disabledDay,
+          minDate,
+          maxDate
+        );
         if (isActuallyDisabled) {
           classes.push('rdr-DayDisabled');
           if (classNamesObj.dayDisabled) classes.push(classNamesObj.dayDisabled);
@@ -325,7 +338,6 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
         minDate,
         maxDate,
         range,
-        focusedPart,
         previewRange,
         weekStartsOn,
         classNames,
@@ -407,7 +419,9 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
           clearTimeout(hoverDebounceTimeoutRef.current);
         }
 
-        setHoverDate(day);
+        if (onHoverDateChange) {
+          onHoverDateChange(day);
+        }
 
         if (dragSelectionEnabled && isDragging && dragStartDate) {
           // Mouse moved during drag - this is an actual drag operation
@@ -429,6 +443,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
         onDateChange,
         updateDragState,
         debouncedUpdateDate,
+        onHoverDateChange,
       ]
     );
 
@@ -441,9 +456,11 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
 
       // Don't clear hover date if dragging - we want to maintain drag state across calendars
       if (!isDragging) {
-        setHoverDate(null);
+        if (onHoverDateChange) {
+          onHoverDateChange(null);
+        }
       }
-    }, [isDragging]);
+    }, [isDragging, onHoverDateChange]);
 
     const handleDayClick = useCallback(
       (day: Dayjs, event: React.MouseEvent) => {
@@ -483,7 +500,17 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
           hasDragged: false,
         });
       },
-      [dragSelectionEnabled, month, focusedPart, onDateChange, disabledDates, disabledDay, minDate, maxDate, updateDragState]
+      [
+        dragSelectionEnabled,
+        month,
+        focusedPart,
+        onDateChange,
+        disabledDates,
+        disabledDay,
+        minDate,
+        maxDate,
+        updateDragState,
+      ]
     );
 
     const handleDayMouseUp = useCallback(
@@ -529,7 +556,9 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
           dragStartDate: null,
           hasDragged: false,
         });
-        setHoverDate(null);
+        if (onHoverDateChange) {
+          onHoverDateChange(null);
+        }
       },
       [
         dragSelectionEnabled,
@@ -543,6 +572,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
         minDate,
         maxDate,
         updateDragState,
+        onHoverDateChange,
       ]
     );
 
@@ -554,7 +584,9 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
             dragStartDate: null,
             hasDragged: false,
           });
-          setHoverDate(null);
+          if (onHoverDateChange) {
+            onHoverDateChange(null);
+          }
         }
       };
 
@@ -562,7 +594,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
       return () => {
         document.removeEventListener('mouseup', handleMouseUp);
       };
-    }, [isDragging, updateDragState]);
+    }, [isDragging, updateDragState, onHoverDateChange]);
 
     return (
       <div
