@@ -422,74 +422,6 @@ function App() {
       </div>
 
       <div style={{ marginBottom: '3rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>Without Predefined Ranges</h2>
-        <div
-          style={{
-            marginBottom: '1rem',
-            padding: '1rem',
-            background: '#e8f4f8',
-            borderRadius: '4px',
-            fontSize: '0.875rem',
-          }}
-        >
-          <strong>Props used:</strong>
-          <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
-            <li>
-              <code>staticRanges</code> - Set to empty array <code>[]</code> to disable predefined
-              ranges
-            </li>
-            <li>
-              <code>onChange</code> - Callback fired when the user changes the date range (type:{' '}
-              <code>(item: RangeKeyDict) =&gt; void</code>)
-            </li>
-            <li>
-              <code>ranges</code> - Array of range objects to display and control (type:{' '}
-              <code>Range[]</code>)
-            </li>
-            <li>
-              <code>themeColor</code> - Primary theme color for selected ranges, hover borders,
-              focus styles, etc. (type: <code>string</code>, default: <code>'#3d91ff'</code>)
-            </li>
-            <li>
-              <code>showDateDisplay</code> - Show the date input tabs (type: <code>boolean</code>,
-              default: <code>true</code>)
-            </li>
-          </ul>
-          <p style={{ margin: '0.5rem 0 0 0', fontStyle: 'italic', color: '#666' }}>
-            Pass <code>staticRanges={[]}</code> to disable predefined ranges completely.
-          </p>
-          <details style={{ marginTop: '0.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Code Example</summary>
-            <pre
-              style={{
-                marginTop: '0.5rem',
-                padding: '0.5rem',
-                background: '#ffffff',
-                borderRadius: '4px',
-                overflow: 'auto',
-                fontSize: '0.75rem',
-              }}
-            >
-              {`<DateRangePicker
-  onChange={handleChange}
-  ranges={[state.selection]}
-  staticRanges={[]}
-  themeColor={themeColor}
-  showDateDisplay={true}
-/>`}
-            </pre>
-          </details>
-        </div>
-        <DateRangePicker
-          onChange={handleChange}
-          ranges={[state.selection]}
-          staticRanges={[]}
-          themeColor={themeColor}
-          showDateDisplay={true}
-        />
-      </div>
-
-      <div style={{ marginBottom: '3rem' }}>
         <h2 style={{ marginBottom: '1rem' }}>Editable Date Inputs</h2>
         <div
           style={{
@@ -634,7 +566,7 @@ function App() {
       </div>
 
       <div style={{ marginBottom: '3rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>Custom Colors (Legacy)</h2>
+        <h2 style={{ marginBottom: '1rem' }}>With Min/Max Dates</h2>
         <div
           style={{
             marginBottom: '1rem',
@@ -647,12 +579,12 @@ function App() {
           <strong>Props used:</strong>
           <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
             <li>
-              <code>color</code> - Default color for range objects (type: <code>string</code>,
-              legacy prop, use <code>themeColor</code> instead)
+              <code>minDate</code> - Minimum selectable date (type: <code>DateInput</code>). Dates
+              before this are automatically disabled and appear with a distinct disabled styling.
             </li>
             <li>
-              <code>themeColor</code> - Primary theme color for selected ranges, hover borders,
-              focus styles, etc. (type: <code>string</code>, default: <code>'#3d91ff'</code>)
+              <code>maxDate</code> - Maximum selectable date (type: <code>DateInput</code>). Dates
+              after this are automatically disabled and appear with a distinct disabled styling.
             </li>
             <li>
               <code>onChange</code> - Callback fired when the user changes the date range (type:{' '}
@@ -663,14 +595,19 @@ function App() {
               <code>Range[]</code>)
             </li>
             <li>
+              <code>themeColor</code> - Primary theme color for selected ranges, hover borders,
+              focus styles, etc. (type: <code>string</code>, default: <code>'#3d91ff'</code>)
+            </li>
+            <li>
               <code>showDateDisplay</code> - Show the date input tabs (type: <code>boolean</code>,
               default: <code>true</code>)
             </li>
           </ul>
           <p style={{ margin: '0.5rem 0 0 0', fontStyle: 'italic', color: '#666' }}>
-            <strong>Note:</strong> The <code>color</code> prop is legacy. Use{' '}
-            <code>themeColor</code> for theme colors and set <code>color</code> on individual range
-            objects for per-range colors.
+            Dates outside the min/max range are disabled and have a distinct visual appearance (grey
+            background, darker text) that differs from adjacent month dates (which are just faded).
+            Users can navigate to adjacent months to select dates there, but cannot select dates
+            outside the min/max range.
           </p>
           <details style={{ marginTop: '0.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Code Example</summary>
@@ -688,7 +625,8 @@ function App() {
   onChange={handleChange}
   ranges={[state.selection]}
   themeColor={themeColor}
-  color="#ff6b6b" // Legacy prop
+  minDate={dayjs().subtract(1, 'month').toDate()}
+  maxDate={dayjs().add(1, 'month').toDate()}
   showDateDisplay={true}
 />`}
             </pre>
@@ -698,7 +636,8 @@ function App() {
           onChange={handleChange}
           ranges={[state.selection]}
           themeColor={themeColor}
-          color="#ff6b6b"
+          minDate={dayjs().subtract(1, 'month').toDate()}
+          maxDate={dayjs().add(1, 'month').toDate()}
           showDateDisplay={true}
         />
       </div>

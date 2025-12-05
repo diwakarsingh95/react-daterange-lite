@@ -71,6 +71,8 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
 
     // Ref to store the debounce timeout for hover state updates
     const hoverDebounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // Ref to track if a drag operation occurred (to prevent onClick from firing after drag)
+    const dragOccurredRef = useRef<boolean>(false);
 
     // Cleanup debounce timeouts on unmount
     useEffect(() => {
@@ -220,8 +222,10 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
           if (classNamesObj.dayToday) classes.push(classNamesObj.dayToday);
         }
 
-        // Check if disabled
-        if (isDateDisabled(day, month, disabledDates, disabledDay, minDate, maxDate)) {
+        // Check if actually disabled (min/max/disabledDates/disabledDay) - NOT checking month
+        // Adjacent month dates are not disabled, they're just passive
+        const isActuallyDisabled = isDateDisabled(day, disabledDates, disabledDay, minDate, maxDate);
+        if (isActuallyDisabled) {
           classes.push('rdr-DayDisabled');
           if (classNamesObj.dayDisabled) classes.push(classNamesObj.dayDisabled);
           return classes.join(' ');
@@ -441,13 +445,35 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
       }
     }, [isDragging]);
 
-    const handleDayMouseDown = useCallback(
-      (day: Dayjs) => {
-        if (!dragSelectionEnabled) return;
-        if (isDateDisabled(day, month, disabledDates, disabledDay, minDate, maxDate)) return;
-
+    const handleDayClick = useCallback(
+      (day: Dayjs, event: React.MouseEvent) => {
+        // Prevent click if this was part of a drag operation
+        if (dragOccurredRef.current) {
+          dragOccurredRef.current = false; // Reset for next interaction
+          event.preventDefault();
+          return;
+        }
+        // Only allow selection of dates in current month AND not actually disabled
+        if (!isSameMonth(day, month)) return;
+        if (isDateDisabled(day, disabledDates, disabledDay, minDate, maxDate)) return;
         const part = focusedPart === 0 ? 'startDate' : 'endDate';
         onDateChange(day, part);
+      },
+      [month, focusedPart, onDateChange, disabledDates, disabledDay, minDate, maxDate]
+    );
+
+    const handleDayMouseDown = useCallback(
+      (day: Dayjs) => {
+        // Only allow selection of dates in current month AND not actually disabled
+        if (!isSameMonth(day, month)) return;
+        if (isDateDisabled(day, disabledDates, disabledDay, minDate, maxDate)) return;
+
+        if (!dragSelectionEnabled) {
+          // If drag is disabled, handle as simple click
+          const part = focusedPart === 0 ? 'startDate' : 'endDate';
+          onDateChange(day, part);
+          return;
+        }
 
         // Start tracking drag - don't call onDateChange yet
         // Only call it if mouse actually moves (drag happens)
@@ -457,13 +483,15 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
           hasDragged: false,
         });
       },
-      [dragSelectionEnabled, disabledDates, disabledDay, minDate, maxDate, updateDragState]
+      [dragSelectionEnabled, month, focusedPart, onDateChange, disabledDates, disabledDay, minDate, maxDate, updateDragState]
     );
 
     const handleDayMouseUp = useCallback(
       (day: Dayjs) => {
         if (!dragSelectionEnabled || !isDragging) return;
-        if (isDateDisabled(day, month, disabledDates, disabledDay, minDate, maxDate)) return;
+        // Only allow selection of dates in current month AND not actually disabled
+        if (!isSameMonth(day, month)) return;
+        if (isDateDisabled(day, disabledDates, disabledDay, minDate, maxDate)) return;
 
         // Clear any pending debounced updates
         if (debounceTimeoutRef.current) {
@@ -479,6 +507,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
 
         // If drag actually happened (mouse moved), finalize the end date
         if (dragStartDate && hasDragged) {
+          dragOccurredRef.current = true; // Mark that a drag occurred
           // Use the last debounced day if available, otherwise use current day
           const finalDay = lastDebouncedDayRef.current || day;
 
@@ -488,8 +517,8 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
             onDateChange(finalDay, 'startDate');
           }
         } else if (dragStartDate && !hasDragged) {
-          // Just a click, not a drag - let handleDayClick handle it
-          // Reset state so click handler can work
+          // Just a click, not a drag - onClick will handle it
+          dragOccurredRef.current = false;
         }
 
         // Reset refs
@@ -508,6 +537,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
         dragStartDate,
         hasDragged,
         onDateChange,
+        month,
         disabledDates,
         disabledDay,
         minDate,
@@ -675,14 +705,16 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
           {calendarDays.map((day: Dayjs, index: number) => {
             const dayClasses = getDayClasses(day);
             const dayStyle = styles?.day ?? {};
-            const isDisabled = isDateDisabled(
+            // Check if date is actually disabled (not just from adjacent month)
+            const isActuallyDisabled = isDateDisabled(
               day,
-              month,
               disabledDates,
               disabledDay,
               minDate,
               maxDate
             );
+            // Disable button only if actually disabled OR from adjacent month
+            const isDisabled = isActuallyDisabled || !isSameMonth(day, month);
 
             const dayInnerStyle = getDayInnerStyle(day);
 
@@ -692,6 +724,7 @@ export const Calendar: React.FC<CalendarProps> = React.memo(
                 type="button"
                 className={dayClasses}
                 style={dayStyle}
+                onClick={(e) => handleDayClick(day, e)}
                 onMouseEnter={() => handleDayMouseEnter(day)}
                 onMouseDown={() => handleDayMouseDown(day)}
                 onMouseUp={() => handleDayMouseUp(day)}

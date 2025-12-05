@@ -208,11 +208,11 @@ export const getCalendarDays = (date: DateInput, weekStartsOn: number = 0): Dayj
 };
 
 /**
- * Check if date is disabled
+ * Check if date is actually disabled (due to min/max/disabledDates/disabledDay constraints)
+ * This does NOT check if the date is in the current month - adjacent month dates can be selected
  */
 export const isDateDisabled = (
   date: DateInput,
-  month: DateInput,
   disabledDates?: DateInput[],
   disabledDay?: (date: Dayjs) => boolean,
   minDate?: DateInput,
@@ -220,8 +220,6 @@ export const isDateDisabled = (
 ): boolean => {
   const d = toDayjs(date);
   if (!d) return true;
-
-  if (!isSameMonth(d, month)) return true;
 
   // Check min/max date
   if (minDate && isBefore(d, minDate)) return true;
@@ -236,4 +234,27 @@ export const isDateDisabled = (
   if (disabledDay && disabledDay(d)) return true;
 
   return false;
+};
+
+/**
+ * Check if date should be disabled for selection in a specific month view
+ * This includes both actual disabled dates AND dates from adjacent months
+ * @deprecated Use isDateDisabled for actual constraints and isSameMonth for month check separately
+ */
+export const isDateDisabledInMonth = (
+  date: DateInput,
+  month: DateInput,
+  disabledDates?: DateInput[],
+  disabledDay?: (date: Dayjs) => boolean,
+  minDate?: DateInput,
+  maxDate?: DateInput
+): boolean => {
+  const d = toDayjs(date);
+  if (!d) return true;
+
+  // Dates from adjacent months should be disabled in current month view
+  if (!isSameMonth(d, month)) return true;
+
+  // Check actual disabled constraints
+  return isDateDisabled(date, disabledDates, disabledDay, minDate, maxDate);
 };
