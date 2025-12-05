@@ -1,0 +1,42 @@
+# Source files
+src
+*.ts
+*.tsx
+!*.d.ts
+
+# Development files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Demo/Preview files
+demo
+index.html
+
+# Config files
+tsconfig.json
+vite.config.ts
+.eslintrc.json
+.prettierrc
+.gitignore
+.npmignore
+
+# Documentation
+IMPLEMENTATION_PLAN.md
+DEVELOPMENT.md
+QUICK_START.md
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+__tests__
+coverage
+
+# Build artifacts (keep dist)
+*.tsbuildinfo
+
+

@@ -1,0 +1,104 @@
+.rdr-DateRangePickerWrapper {
+  /* Default theme color - can be overridden via CSS variable */
+  --rdr-theme-color: #3d91ff;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  color: #000000;
+  border: 1px solid #d5d5d5;
+  background-color: #ffffff;
+  border-radius: 2px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rdr-DateRangePickerMain {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.rdr-DateDisplay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #000000;
+  background-color: #ffffff;
+  padding: 0.833em;
+  border-bottom: 1px solid #eff2f7;
+  gap: 1em;
+}
+
+.rdr-DateDisplayItem {
+  opacity: 1;
+  flex: 1;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rdr-DateDisplayItem:hover {
+  background-color: #f0f0f0;
+}
+
+.rdr-DateDisplayItemActive {
+  background-color: #eff2f7;
+}
+
+.rdr-DateDisplayItemInput {
+  width: 100%;
+  padding: 0.5em;
+  text-align: center;
+  border: 0;
+  background: transparent;
+  font-size: 0.875em;
+  color: #849095;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.rdr-DateDisplayItemInput:focus {
+  outline: none;
+}
+
+.rdr-DateRangePickerContent {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  align-items: stretch;
+  height: 100%;
+}
+
+.rdr-CalendarWrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  align-items: flex-start;
+  position: relative;
+  z-index: 0;
+}
+
+.rdr-CalendarWrapper-horizontal {
+  flex-direction: row;
+}
+
+.rdr-CalendarWrapper-vertical {
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .rdr-CalendarWrapper {
+    flex-direction: column;
+  }
+}

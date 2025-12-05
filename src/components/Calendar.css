@@ -1,0 +1,562 @@
+.rdr-Calendar {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  background: #ffffff;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  position: relative;
+  /* Default theme color - can be overridden via CSS variable */
+  --rdr-theme-color: #3d91ff;
+}
+
+.rdr-MonthAndYearWrapper {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.833em 1.5em;
+  max-height: 60px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+  gap: 0.5em;
+}
+
+.rdr-MonthAndYearPickers {
+  display: flex;
+  gap: 0.25em;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.rdr-MonthPicker,
+.rdr-YearPicker {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 0.25em 1.5em 0.25em 0.5em;
+  font-weight: 500;
+  font-size: 0.875em;
+  color: #1d2429;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-align: left;
+  position: relative;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231d2429' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5em center;
+  background-size: 0.75em;
+}
+
+.rdr-MonthPicker:hover,
+.rdr-YearPicker:hover {
+  background-color: #f5f8ff;
+  border-color: #d5d5d5;
+}
+
+.rdr-MonthPicker:focus,
+.rdr-YearPicker:focus {
+  outline: none;
+  border-width: 0;
+  border-color: transparent;
+}
+
+.rdr-NextPrevButton {
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2em;
+  width: 2em;
+  user-select: none;
+  border: 1px solid #d5d5d5;
+  background: #ffffff;
+  border-radius: 4px;
+  color: #1d2429;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.rdr-NextPrevButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rdr-NextPrevButton:hover {
+  color: var(--rdr-theme-color, #3d91ff);
+  border-color: var(--rdr-theme-color, #3d91ff);
+  background: #f5f8ff;
+}
+
+.rdr-NextPrevButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.rdr-PrevButton {
+  flex-shrink: 0;
+  margin-right: 0;
+}
+
+.rdr-NextButton {
+  flex-shrink: 0;
+  margin-left: 0;
+}
+
+.rdr-MonthTitle {
+  text-align: left;
+  font-size: 0.875em;
+  font-weight: 700;
+  color: #849095;
+  padding: 0.833rem 1.5rem 0.5rem;
+  flex-shrink: 0;
+}
+
+.rdr-WeekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 1rem;
+}
+
+.rdr-WeekDay {
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 0.833em;
+  font-weight: 400;
+  color: #849095;
+  padding: 0.833em 0;
+  line-height: 1.667em;
+}
+
+.rdr-Days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 0.25em;
+  padding: 0.833em 1em;
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.rdr-Day {
+  box-sizing: border-box;
+  position: relative;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  border-inline: none;
+  border-block: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  outline: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5em;
+  line-height: 2.5em;
+  transition: all 0.2s ease;
+}
+
+.rdr-Day:hover:not(.rdr-DayDisabled):not(.rdr-DayPassive) {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.rdr-Day:focus:not(.rdr-DayDisabled):not(.rdr-DayPassive) {
+  outline: none;
+  border-radius: 4px;
+}
+
+.rdr-DayInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - 8px);
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.rdr-DayNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  font-size: 0.875em;
+  line-height: 1.667em;
+  font-weight: 400;
+  color: #1d2429;
+}
+
+.rdr-DayPassive {
+  cursor: default;
+  color: #d5d5d5;
+}
+
+.rdr-DayPassive .rdr-DayNumber {
+  color: #d5d5d5;
+}
+
+/* Ensure passive days (from adjacent months) don't show active styling even if selected */
+.rdr-DayPassive.rdr-DaySelected .rdr-DayInner {
+  background-color: transparent !important;
+  color: #d5d5d5 !important;
+}
+
+.rdr-DayPassive.rdr-DaySelected .rdr-DayNumber {
+  color: #d5d5d5 !important;
+}
+
+.rdr-DayPassive.rdr-DayStartOfRange .rdr-DayInner,
+.rdr-DayPassive.rdr-DayEndOfRange .rdr-DayInner,
+.rdr-DayPassive.rdr-DayInRange .rdr-DayInner {
+  background-color: transparent !important;
+  color: #d5d5d5 !important;
+  border-radius: 0 !important;
+}
+
+.rdr-DayPassive.rdr-DayStartOfRange .rdr-DayNumber,
+.rdr-DayPassive.rdr-DayEndOfRange .rdr-DayNumber,
+.rdr-DayPassive.rdr-DayInRange .rdr-DayNumber {
+  color: #d5d5d5 !important;
+}
+
+.rdr-DayToday .rdr-DayNumber {
+  font-weight: 600;
+}
+
+.rdr-DayToday.rdr-DaySelected .rdr-DayNumber {
+  color: #ffffff;
+}
+
+/* Today date bottom border when not in selected range */
+.rdr-DayToday:not(.rdr-DaySelected):not(.rdr-DayInRange) .rdr-DayNumber {
+  border-bottom: 2px solid var(--rdr-theme-color, #3d91ff);
+  padding-bottom: 2px;
+}
+
+.rdr-DayDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.rdr-DayDisabled .rdr-DayNumber {
+  color: #d5d5d5;
+}
+
+.rdr-DaySelected:not(.rdr-DayStartOfWeek):not(.rdr-DayEndOfWeek) .rdr-DayInner {
+  background-color: var(--rdr-theme-color, #3d91ff);
+  color: #ffffff;
+  border-radius: 0;
+}
+
+.rdr-DaySelected .rdr-DayNumber {
+  color: #ffffff;
+}
+
+/* Override selected styling for passive days (adjacent months) */
+.rdr-DayPassive.rdr-DaySelected .rdr-DayInner {
+  background-color: transparent !important;
+  color: #d5d5d5 !important;
+}
+
+.rdr-DayPassive.rdr-DaySelected .rdr-DayNumber {
+  color: #d5d5d5 !important;
+}
+
+.rdr-DayStartOfRange .rdr-DayInner,
+.rdr-DayEndOfRange .rdr-DayInner {
+  background-color: var(--rdr-theme-color, #3d91ff);
+  color: #ffffff;
+}
+
+.rdr-DayStartOfRange .rdr-DayNumber,
+.rdr-DayEndOfRange .rdr-DayNumber {
+  color: #ffffff;
+}
+
+/* Override range styling for passive days (adjacent months) */
+.rdr-DayPassive.rdr-DayStartOfRange .rdr-DayInner,
+.rdr-DayPassive.rdr-DayEndOfRange .rdr-DayInner {
+  background-color: transparent !important;
+  color: #d5d5d5 !important;
+  border-radius: 0 !important;
+}
+
+.rdr-DayPassive.rdr-DayStartOfRange .rdr-DayNumber,
+.rdr-DayPassive.rdr-DayEndOfRange .rdr-DayNumber {
+  color: #d5d5d5 !important;
+}
+
+/* Ensure continuous background for range dates - remove all border radius from middle dates */
+.rdr-DayInRange .rdr-DayInner {
+  background-color: var(--rdr-theme-color, #3d91ff);
+  color: #ffffff;
+  border-radius: 0 !important;
+}
+
+.rdr-DayInRange .rdr-DayNumber {
+  color: #ffffff;
+}
+
+.rdr-DayPassive.rdr-DayInRange .rdr-DayNumber {
+  color: #d5d5d5 !important;
+}
+
+/* Rounded corners only at start and end of selected range - more rounded */
+.rdr-DayStartOfRange .rdr-DayInner {
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.rdr-DayEndOfRange .rdr-DayInner {
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* If start and end are the same date */
+.rdr-DayStartOfRange.rdr-DayEndOfRange .rdr-DayInner {
+  border-radius: 1em !important;
+}
+
+/* Row-level rounded corners - start of week row */
+.rdr-DayStartOfRange.rdr-DayStartOfWeek .rdr-DayInner {
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+
+.rdr-DayEndOfRange.rdr-DaySelected:not(.rdr-DayInHoverRange) {
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+}
+
+/* Row-level rounded corners - end of week row */
+.rdr-DayEndOfRange.rdr-DayEndOfWeek .rdr-DayInner {
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+}
+
+.rdr-DayInRange .rdr-DayNumber {
+  color: #ffffff;
+}
+
+.rdr-DayInHoverRange {
+  /* Use actual borders with negative margins to create continuous border */
+  border-top: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-bottom: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  outline: none !important;
+}
+
+.rdr-DayInHoverRange:not(.rdr-DayInRange):not(.rdr-DaySelected) .rdr-DayNumber {
+  color: #1d2429;
+}
+
+/* Overlap left border for dates that have a previous date in hover range */
+.rdr-DayHoverRangeHasPrev:not(.rdr-DayStartOfWeek) {
+  margin-left: -1px !important;
+  border-left: none !important;
+  border-left-width: 0 !important;
+}
+
+/* Overlap right border for dates that have a next date in hover range */
+.rdr-DayHoverRangeHasNext:not(.rdr-DayEndOfWeek) {
+  margin-right: -1px !important;
+  border-right: none !important;
+  border-right-width: 0 !important;
+}
+
+/* Overlap both sides for dates in the middle of hover range */
+.rdr-DayHoverRangeHasPrev.rdr-DayHoverRangeHasNext:not(.rdr-DayStartOfWeek):not(.rdr-DayEndOfWeek) {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-left-width: 0 !important;
+  border-right-width: 0 !important;
+}
+
+/* Rounded corners for hover range start/end - reset margins and show full border */
+.rdr-DayHoverRangeStart {
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+  margin-left: -1px !important;
+  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+}
+
+.rdr-DayHoverRangeEnd {
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+  margin-right: -1px !important;
+  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+}
+
+/* Ensure hover border doesn't override selected background */
+.rdr-DaySelected.rdr-DayInHoverRange,
+.rdr-DayInRange:not(.rdr-DayStartOfRange):not(.rdr-DayEndOfRange).rdr-DayInHoverRange,
+.rdr-DayStartOfRange:not(.rdr-DayEndOfRange).rdr-DayInHoverRange,
+.rdr-DayEndOfRange:not(.rdr-DayStartOfRange).rdr-DayInHoverRange {
+  box-shadow: none !important;
+  border-inline: none !important;
+  background-color: inherit !important;
+}
+
+.rdr-DayStartOfWeek {
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+
+.rdr-DayStartOfWeek.rdr-DaySelected.rdr-DayInRange .rdr-DayInner {
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+
+.rdr-DayEndOfWeek {
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+}
+
+.rdr-DayEndOfWeek.rdr-DaySelected.rdr-DayInRange .rdr-DayInner {
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+}
+
+.rdr-DayStartOfMonth {
+  border-top-left-radius: 1em;
+}
+
+.rdr-DayEndOfMonth {
+  border-top-right-radius: 1em;
+}
+
+.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev {
+  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+}
+
+.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev {
+  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+  border-left: none !important;
+  border-left-width: 0 !important;
+  margin-left: -1px !important;
+}
+
+.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
+  .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  margin-right: 4px !important;
+}
+
+.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
+  .rdr-DayInner
+  .rdr-DayNumber {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev.rdr-DayEndOfWeek
+  .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  padding-right: 4px !important;
+}
+
+.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev.rdr-DayEndOfWeek
+  .rdr-DayInner
+  .rdr-DayNumber {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext {
+  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+
+.rdr-Day.rdr-DayToday.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext
+  .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  margin-left: 4px !important;
+}
+
+.rdr-Day.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayStartOfWeek .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  margin-left: 4px !important;
+}
+
+.rdr-Day.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayEndOfWeek .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  margin-right: 4px !important;
+}
+
+.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeHasPrev.rdr-DayEndOfWeek
+  .rdr-DayInner
+  .rdr-DayNumber {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.rdr-Day.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext {
+  border-left: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-top-left-radius: 1em !important;
+  border-bottom-left-radius: 1em !important;
+}
+
+.rdr-Day.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext
+  .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  margin-left: 4px !important;
+}
+
+.rdr-Day.rdr-DayStartOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeStart.rdr-DayHoverRangeHasNext
+  .rdr-DayInner
+  .rdr-DayNumber {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev {
+  border-right: 1px solid var(--rdr-theme-color, #3d91ff) !important;
+  border-top-right-radius: 1em !important;
+  border-bottom-right-radius: 1em !important;
+}
+
+.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
+  .rdr-DayInner {
+  width: calc(100% - 4px) !important;
+  margin-right: 4px !important;
+}
+
+.rdr-Day.rdr-DayEndOfRange.rdr-DaySelected.rdr-DayInHoverRange.rdr-DayHoverRangeEnd.rdr-DayHoverRangeHasPrev
+  .rdr-DayInner
+  .rdr-DayNumber {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}

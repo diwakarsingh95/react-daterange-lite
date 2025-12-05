@@ -1,0 +1,52 @@
+.rdr-DateInput {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.rdr-DateInput-input {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid #d5d5d5;
+  border-radius: 4px;
+  font-size: 0.875em;
+  color: #1d2429;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.rdr-DateInput-input:focus {
+  outline: none;
+  border-color: var(--rdr-theme-color, #3d91ff);
+}
+
+.rdr-DateInput-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.rdr-DateInput-display {
+  width: 100%;
+  padding: 0.5em;
+  text-align: center;
+  font-size: 0.875em;
+  color: #1d2429;
+  cursor: pointer;
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.rdr-DateInput-display:focus {
+  outline: none;
+  background-color: #f0f0f0;
+}
+
+.rdr-DateInput-placeholder {
+  color: #849095;
+  font-weight: 400;
+}
+
+

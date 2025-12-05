@@ -1,0 +1,83 @@
+.rdr-DefinedRanges {
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: #ffffff;
+  border-right: 1px solid #eff2f7;
+  padding: 1em;
+  width: 200px !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  align-self: stretch;
+  max-height: 100%;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+}
+
+
+.rdr-StaticRange {
+  border: 0;
+  background: transparent;
+  padding: 0.833em 1em;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-size: 0.875em;
+  color: #1d2429;
+  margin-bottom: 0.25em;
+}
+
+.rdr-StaticRange:hover {
+  background-color: #f0f0f0;
+}
+
+.rdr-StaticRange:focus {
+  outline: 2px solid var(--rdr-theme-color, #3d91ff);
+  outline-offset: -2px;
+}
+
+.rdr-StaticRangeSelected {
+  background-color: #eff2f7;
+  font-weight: 600;
+  color: var(--rdr-theme-color, #3d91ff);
+}
+
+.rdr-StaticRangeLabel {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.rdr-InputRange {
+  display: flex;
+  flex-direction: column;
+  padding: 0.833em 1em;
+  margin-bottom: 0.5em;
+}
+
+.rdr-InputRangeLabel {
+  font-size: 0.75em;
+  color: #849095;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+}
+
+.rdr-InputRangeInput {
+  padding: 0.5em;
+  border: 1px solid #d5d5d5;
+  border-radius: 4px;
+  font-size: 0.875em;
+  color: #1d2429;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rdr-InputRangeInput:focus {
+  outline: none;
+  border-color: var(--rdr-theme-color, #3d91ff);
+}
+
+
