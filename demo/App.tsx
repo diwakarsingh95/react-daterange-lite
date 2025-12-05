@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { DateRangePicker } from '../src/components/DateRangePicker';
+import { DateRangePicker } from '../src';
 import type { RangeKeyDict } from '../src/types';
 
 function App() {
@@ -28,64 +28,18 @@ function App() {
     });
   };
 
-  // Predefined ranges
-  const staticRanges = [
+  // Custom predefined ranges example (for demonstration)
+  const customStaticRanges = [
     {
-      label: 'Today',
+      label: 'Last 14 Days',
       range: () => ({
-        startDate: dayjs().toDate(),
+        startDate: dayjs().subtract(13, 'day').toDate(),
         endDate: dayjs().toDate(),
-        key: 'today',
+        key: 'last14Days',
       }),
-      isSelected: (range) => {
+      isSelected: (range: any) => {
         if (!range.startDate || !range.endDate) return false;
-        return (
-          dayjs(range.startDate).isSame(dayjs(), 'day') &&
-          dayjs(range.endDate).isSame(dayjs(), 'day')
-        );
-      },
-    },
-    {
-      label: 'Yesterday',
-      range: () => ({
-        startDate: dayjs().subtract(1, 'day').toDate(),
-        endDate: dayjs().subtract(1, 'day').toDate(),
-        key: 'yesterday',
-      }),
-      isSelected: (range) => {
-        if (!range.startDate || !range.endDate) return false;
-        return (
-          dayjs(range.startDate).isSame(dayjs().subtract(1, 'day'), 'day') &&
-          dayjs(range.endDate).isSame(dayjs().subtract(1, 'day'), 'day')
-        );
-      },
-    },
-    {
-      label: 'This Week',
-      range: () => ({
-        startDate: dayjs().startOf('week').toDate(),
-        endDate: dayjs().endOf('week').toDate(),
-        key: 'thisWeek',
-      }),
-      isSelected: (range) => {
-        if (!range.startDate || !range.endDate) return false;
-        const start = dayjs().startOf('week');
-        const end = dayjs().endOf('week');
-        return (
-          dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day')
-        );
-      },
-    },
-    {
-      label: 'Last 7 Days',
-      range: () => ({
-        startDate: dayjs().subtract(6, 'day').toDate(),
-        endDate: dayjs().toDate(),
-        key: 'last7Days',
-      }),
-      isSelected: (range) => {
-        if (!range.startDate || !range.endDate) return false;
-        const start = dayjs().subtract(6, 'day');
+        const start = dayjs().subtract(13, 'day');
         const end = dayjs();
         return (
           dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day')
@@ -93,32 +47,16 @@ function App() {
       },
     },
     {
-      label: 'Last 30 Days',
+      label: 'Last 90 Days',
       range: () => ({
-        startDate: dayjs().subtract(29, 'day').toDate(),
+        startDate: dayjs().subtract(89, 'day').toDate(),
         endDate: dayjs().toDate(),
-        key: 'last30Days',
+        key: 'last90Days',
       }),
-      isSelected: (range) => {
+      isSelected: (range: any) => {
         if (!range.startDate || !range.endDate) return false;
-        const start = dayjs().subtract(29, 'day');
+        const start = dayjs().subtract(89, 'day');
         const end = dayjs();
-        return (
-          dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day')
-        );
-      },
-    },
-    {
-      label: 'This Month',
-      range: () => ({
-        startDate: dayjs().startOf('month').toDate(),
-        endDate: dayjs().endOf('month').toDate(),
-        key: 'thisMonth',
-      }),
-      isSelected: (range) => {
-        if (!range.startDate || !range.endDate) return false;
-        const start = dayjs().startOf('month');
-        const end = dayjs().endOf('month');
         return (
           dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day')
         );
@@ -139,7 +77,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '1rem' }}>react-daterange-lite</h1>
+      <h1 style={{ marginBottom: '1rem' }}>React Date Range Lite</h1>
       <p style={{ marginBottom: '2rem', color: '#666', fontSize: '0.875rem', lineHeight: '1.6' }}>
         A lightweight, performant React date range picker library using dayjs. Built with modern
         React standards, tree-shakable, and fully customizable. Each example below includes detailed
@@ -302,7 +240,9 @@ function App() {
       </div>
 
       <div style={{ marginBottom: '3rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>Basic Example</h2>
+        <h2 style={{ marginBottom: '1rem' }}>
+          Basic Example (Predefined Ranges Visible by Default)
+        </h2>
         <div
           style={{
             marginBottom: '1rem',
@@ -335,6 +275,11 @@ function App() {
               <code>boolean</code>, default: <code>false</code>)
             </li>
           </ul>
+          <p style={{ margin: '0.5rem 0 0 0', fontStyle: 'italic', color: '#666' }}>
+            <strong>Note:</strong> Predefined ranges (Today, Yesterday, This Week, Last 7 Days, Last
+            30 Days, This Month, Last Month) are visible by default. No need to pass{' '}
+            <code>staticRanges</code> prop unless you want custom ranges.
+          </p>
           <details style={{ marginTop: '0.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Code Example</summary>
             <pre
@@ -376,7 +321,7 @@ function App() {
       </div>
 
       <div style={{ marginBottom: '3rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>With Predefined Ranges</h2>
+        <h2 style={{ marginBottom: '1rem' }}>With Custom Predefined Ranges</h2>
         <div
           style={{
             marginBottom: '1rem',
@@ -389,7 +334,7 @@ function App() {
           <strong>Props used:</strong>
           <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
             <li>
-              <code>staticRanges</code> - Array of predefined range options (type:{' '}
+              <code>staticRanges</code> - Array of custom predefined range options (type:{' '}
               <code>StaticRange[]</code>). Each range has:
               <ul style={{ marginTop: '0.25rem', paddingLeft: '1.5rem' }}>
                 <li>
@@ -422,6 +367,7 @@ function App() {
             </li>
           </ul>
           <p style={{ margin: '0.5rem 0 0 0', fontStyle: 'italic', color: '#666' }}>
+            Pass custom <code>staticRanges</code> to override the default predefined ranges.
             Predefined ranges are always displayed on the left side of the picker. Hovering over a
             predefined range shows a preview in the calendar.
           </p>
@@ -437,25 +383,29 @@ function App() {
                 fontSize: '0.75rem',
               }}
             >
-              {`const staticRanges = [
+              {`const customStaticRanges = [
   {
-    label: 'Today',
+    label: 'Last 14 Days',
     range: () => ({
-      startDate: dayjs().toDate(),
+      startDate: dayjs().subtract(13, 'day').toDate(),
       endDate: dayjs().toDate(),
-      key: 'today',
+      key: 'last14Days',
     }),
-    isSelected: (range) => 
-      dayjs(range.startDate).isSame(dayjs(), 'day') &&
-      dayjs(range.endDate).isSame(dayjs(), 'day'),
+    isSelected: (range) => {
+      if (!range.startDate || !range.endDate) return false;
+      const start = dayjs().subtract(13, 'day');
+      const end = dayjs();
+      return dayjs(range.startDate).isSame(start, 'day') && 
+             dayjs(range.endDate).isSame(end, 'day');
+    },
   },
-  // ... more ranges
+  // ... more custom ranges
 ];
 
 <DateRangePicker
   onChange={handleChange}
   ranges={[state.selection]}
-  staticRanges={staticRanges}
+  staticRanges={customStaticRanges}
   themeColor={themeColor}
   showDateDisplay={true}
 />`}
@@ -465,7 +415,75 @@ function App() {
         <DateRangePicker
           onChange={handleChange}
           ranges={[state.selection]}
-          staticRanges={staticRanges}
+          staticRanges={customStaticRanges}
+          themeColor={themeColor}
+          showDateDisplay={true}
+        />
+      </div>
+
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ marginBottom: '1rem' }}>Without Predefined Ranges</h2>
+        <div
+          style={{
+            marginBottom: '1rem',
+            padding: '1rem',
+            background: '#e8f4f8',
+            borderRadius: '4px',
+            fontSize: '0.875rem',
+          }}
+        >
+          <strong>Props used:</strong>
+          <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
+            <li>
+              <code>staticRanges</code> - Set to empty array <code>[]</code> to disable predefined
+              ranges
+            </li>
+            <li>
+              <code>onChange</code> - Callback fired when the user changes the date range (type:{' '}
+              <code>(item: RangeKeyDict) =&gt; void</code>)
+            </li>
+            <li>
+              <code>ranges</code> - Array of range objects to display and control (type:{' '}
+              <code>Range[]</code>)
+            </li>
+            <li>
+              <code>themeColor</code> - Primary theme color for selected ranges, hover borders,
+              focus styles, etc. (type: <code>string</code>, default: <code>'#3d91ff'</code>)
+            </li>
+            <li>
+              <code>showDateDisplay</code> - Show the date input tabs (type: <code>boolean</code>,
+              default: <code>true</code>)
+            </li>
+          </ul>
+          <p style={{ margin: '0.5rem 0 0 0', fontStyle: 'italic', color: '#666' }}>
+            Pass <code>staticRanges={[]}</code> to disable predefined ranges completely.
+          </p>
+          <details style={{ marginTop: '0.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Code Example</summary>
+            <pre
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.5rem',
+                background: '#ffffff',
+                borderRadius: '4px',
+                overflow: 'auto',
+                fontSize: '0.75rem',
+              }}
+            >
+              {`<DateRangePicker
+  onChange={handleChange}
+  ranges={[state.selection]}
+  staticRanges={[]}
+  themeColor={themeColor}
+  showDateDisplay={true}
+/>`}
+            </pre>
+          </details>
+        </div>
+        <DateRangePicker
+          onChange={handleChange}
+          ranges={[state.selection]}
+          staticRanges={[]}
           themeColor={themeColor}
           showDateDisplay={true}
         />

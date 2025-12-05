@@ -5,6 +5,7 @@ import {
   DEFAULT_COLOR,
   DEFAULT_DATE_FORMAT,
   DEFAULT_MONTH_FORMAT,
+  defaultStaticRanges,
 } from '../utils/constants';
 import { addMonths, subtractMonths, toDate, toDayjs } from '../utils/dateUtils';
 import { normalizeRange } from '../utils/rangeUtils';
@@ -49,7 +50,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
     styles,
     color = DEFAULT_COLOR,
     themeColor = DEFAULT_COLOR,
-    staticRanges,
+    staticRanges = defaultStaticRanges,
     inputRanges,
     onShownDateChange,
     onPreviewChange,
@@ -220,13 +221,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = React.memo(
           onRangeFocusChange([0, newFocusedPart]);
         }
       },
-      [
-        range,
-        onChange,
-        moveRangeOnFirstSelection,
-        retainEndDateOnFirstSelection,
-        onRangeFocusChange,
-      ]
+      [onChange, moveRangeOnFirstSelection, retainEndDateOnFirstSelection, onRangeFocusChange]
     );
 
     // Handle range focus change

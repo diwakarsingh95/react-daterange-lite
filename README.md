@@ -26,6 +26,8 @@ pnpm add react-daterange-lite dayjs
 
 ### Basic Usage
 
+Predefined ranges (Today, Yesterday, This Week, Last 7 Days, Last 30 Days, This Month, Last Month) are visible by default. No configuration needed!
+
 ```tsx
 import React, { useState } from 'react';
 import { DateRangePicker } from 'react-daterange-lite';
@@ -59,36 +61,40 @@ function App() {
 />
 ```
 
-### With Predefined Ranges
+### Customizing Predefined Ranges
+
+By default, predefined ranges are visible. You can customize them or disable them:
+
+**Use Custom Predefined Ranges:**
 
 ```tsx
 import dayjs from 'dayjs';
 
-const staticRanges = [
+const customStaticRanges = [
   {
-    label: 'Today',
+    label: 'Last 14 Days',
     range: () => ({
-      startDate: dayjs().toDate(),
+      startDate: dayjs().subtract(13, 'day').toDate(),
       endDate: dayjs().toDate(),
-      key: 'today',
+      key: 'last14Days',
     }),
     isSelected: (range) => {
       if (!range.startDate || !range.endDate) return false;
-      return (
-        dayjs(range.startDate).isSame(dayjs(), 'day') && dayjs(range.endDate).isSame(dayjs(), 'day')
-      );
+      const start = dayjs().subtract(13, 'day');
+      const end = dayjs();
+      return dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day');
     },
   },
   {
-    label: 'Last 7 Days',
+    label: 'Last 90 Days',
     range: () => ({
-      startDate: dayjs().subtract(6, 'day').toDate(),
+      startDate: dayjs().subtract(89, 'day').toDate(),
       endDate: dayjs().toDate(),
-      key: 'last7Days',
+      key: 'last90Days',
     }),
     isSelected: (range) => {
       if (!range.startDate || !range.endDate) return false;
-      const start = dayjs().subtract(6, 'day');
+      const start = dayjs().subtract(89, 'day');
       const end = dayjs();
       return dayjs(range.startDate).isSame(start, 'day') && dayjs(range.endDate).isSame(end, 'day');
     },
@@ -98,8 +104,49 @@ const staticRanges = [
 <DateRangePicker
   onChange={(item) => setState({ selection: item.selection })}
   ranges={[state.selection]}
-  staticRanges={staticRanges}
-/>;
+  staticRanges={customStaticRanges}
+/>
+```
+
+**Disable Predefined Ranges:**
+
+```tsx
+<DateRangePicker
+  onChange={(item) => setState({ selection: item.selection })}
+  ranges={[state.selection]}
+  staticRanges={[]} // Empty array disables predefined ranges
+/>
+```
+
+**Access Default Predefined Ranges:**
+
+If you want to extend or modify the default ranges, you can import them:
+
+```tsx
+import { DateRangePicker, defaultStaticRanges } from 'react-daterange-lite';
+
+// Extend default ranges
+const customRanges = [
+  ...defaultStaticRanges,
+  {
+    label: 'Custom Range',
+    range: () => ({
+      startDate: dayjs().subtract(10, 'day').toDate(),
+      endDate: dayjs().toDate(),
+      key: 'custom',
+    }),
+    isSelected: (range) => {
+      // Your selection logic
+      return false;
+    },
+  },
+];
+
+<DateRangePicker
+  onChange={(item) => setState({ selection: item.selection })}
+  ranges={[state.selection]}
+  staticRanges={customRanges}
+/>
 ```
 
 ## Examples
@@ -197,7 +244,7 @@ import dayjs from 'dayjs';
 | `styles`                        | `Styles`                                   | -               | Custom styles object                                                 |
 | `themeColor`                    | `string`                                   | `'#3d91ff'`     | Primary theme color for selected ranges, hover borders, focus styles |
 | `color`                         | `string`                                   | `'#3d91ff'`     | Legacy prop, use `themeColor` instead                                |
-| `staticRanges`                  | `StaticRange[]`                            | -               | Predefined ranges                                                    |
+| `staticRanges`                  | `StaticRange[]`                            | `defaultStaticRanges` | Predefined ranges (default: Today, Yesterday, This Week, Last 7 Days, Last 30 Days, This Month, Last Month). Pass `[]` to disable. |
 | `inputRanges`                   | `InputRange[]`                             | -               | Input-based ranges                                                   |
 | `onShownDateChange`             | `(shownDate: Dayjs) => void`               | -               | Callback for shown date change                                       |
 | `onPreviewChange`               | `(preview: Range \| null) => void`         | -               | Callback for preview change                                          |

@@ -53,3 +53,6 @@ export {
   isStartDate,
   normalizeRange,
 } from './utils/rangeUtils';
+
+// Default predefined ranges
+export { defaultStaticRanges } from './utils/constants';
