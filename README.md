@@ -18,19 +18,19 @@ A lightweight, performant React date range picker library built with `dayjs`. AP
 ### Installation
 
 ```bash
-npm install react-date-range-picker dayjs
+npm install react-daterange-lite dayjs
 # or
-yarn add react-date-range-picker dayjs
+yarn add react-daterange-lite dayjs
 # or
-pnpm add react-date-range-picker dayjs
+pnpm add react-daterange-lite dayjs
 ```
 
 ### Basic Usage
 
 ```tsx
 import React, { useState } from 'react';
-import { DateRangePicker } from 'react-date-range-picker';
-import 'react-date-range-picker/styles';
+import { DateRangePicker } from 'react-daterange-lite';
+import 'react-daterange-lite/styles';
 
 function App() {
   const [state, setState] = useState({
@@ -250,8 +250,8 @@ interface StaticRange {
 
 This library is designed to be a drop-in replacement for `react-date-range`. The main differences:
 
-1. **Import path**: Change from `react-date-range` to `react-date-range-picker`
-2. **Styles**: Import from `react-date-range-picker/styles` instead of `react-date-range/dist/styles.css`
+1. **Import path**: Change from `react-date-range` to `react-daterange-lite`
+2. **Styles**: Import from `react-daterange-lite/styles` instead of `react-date-range/dist/styles.css`
 3. **Date library**: Uses `dayjs` internally instead of `date-fns` (no API changes needed)
 
 ### Before (react-date-range)
@@ -262,11 +262,11 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 ```
 
-### After (react-date-range-picker)
+### After (react-daterange-lite)
 
 ```tsx
-import { DateRangePicker } from 'react-date-range-picker';
-import 'react-date-range-picker/styles';
+import { DateRangePicker } from 'react-daterange-lite';
+import 'react-daterange-lite/styles';
 ```
 
 ## Development
@@ -308,7 +308,7 @@ This will start a development server with multiple examples showcasing different
 Full TypeScript support is included. All components and utilities are fully typed.
 
 ```tsx
-import { DateRangePicker, Range, RangeKeyDict } from 'react-date-range-picker';
+import { DateRangePicker, Range, RangeKeyDict } from 'react-daterange-lite';
 
 const handleChange = (item: RangeKeyDict) => {
   const range: Range = item.selection;

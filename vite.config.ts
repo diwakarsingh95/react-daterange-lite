@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig(({ command }) => {
@@ -23,17 +22,19 @@ export default defineConfig(({ command }) => {
       dts({
         insertTypesEntry: true,
         rollupTypes: true,
+        exclude: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
       }),
     ],
     build: {
+      target: 'es2022',
       lib: {
-        entry: resolve(__dirname, 'src/index.ts'),
+        entry: 'src/index.ts',
         name: 'ReactDateRangePicker',
         formats: ['es', 'cjs'],
         fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
       },
       rollupOptions: {
-        external: ['react', 'react-dom', 'react/jsx-runtime'],
+        external: ['react', 'react-dom', 'react/jsx-runtime', 'dayjs'],
         output: {
           globals: {
             react: 'React',
@@ -46,13 +47,34 @@ export default defineConfig(({ command }) => {
             }
             return assetInfo.name || 'asset';
           },
+          // Preserve module structure for better tree-shaking
+          preserveModules: false,
+          // Compact output for smaller bundles
+          compact: true,
+        },
+        // Tree-shaking optimization
+        treeshake: {
+          moduleSideEffects: false,
+          propertyReadSideEffects: false,
+          tryCatchDeoptimization: false,
         },
       },
+      // Generate separate source maps for production
       sourcemap: true,
+      // Aggressive minification with esbuild
       minify: 'esbuild',
+      minifySyntax: true,
+      minifyWhitespace: true,
+      minifyIdentifiers: true,
+      // CSS optimization
       cssCodeSplit: false,
+      cssMinify: true,
+      // Don't copy public directory for libraries
       copyPublicDir: false,
+      // Report compressed size
+      reportCompressedSize: true,
+      // Chunk size warning limit (500KB)
+      chunkSizeWarningLimit: 500,
     },
   };
 });
-

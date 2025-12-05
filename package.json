@@ -1,5 +1,5 @@
 {
-  "name": "react-date-range-picker",
+  "name": "react-daterange-lite",
   "version": "0.1.0",
   "description": "A lightweight, performant React date range picker using dayjs - compatible with react-date-range API",
   "type": "module",
@@ -8,15 +8,18 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
-    "./styles": "./dist/styles.css"
+    "./styles": "./dist/styles.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "sideEffects": false,
   "scripts": {
@@ -24,6 +27,7 @@
     "preview": "vite",
     "build": "tsc && vite build",
     "build:preview": "vite build --mode preview",
+    "prepublishOnly": "npm run build",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "lint": "eslint src",
@@ -39,14 +43,35 @@
     "lightweight",
     "typescript"
   ],
-  "author": "",
+  "author": "Diwakar <diwakar.singh313@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diwakarsingh95/react-date-range-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/diwakarsingh95/react-date-range-picker/issues"
+  },
+  "homepage": "https://github.com/diwakarsingh95/react-date-range-picker#readme",
   "peerDependencies": {
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "dayjs": "^1.11.19"
   },
-  "dependencies": {
-    "dayjs": "^1.11.11"
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    },
+    "dayjs": {
+      "optional": false
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "overrides": {
     "glob": "^11.0.0",
@@ -54,16 +79,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "dayjs": "^1.11.19",
     "eslint": "^9.16.0",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.12.0",
     "prettier": "^3.4.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.1",
     "vite": "^7.2.6",
